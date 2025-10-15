@@ -20,10 +20,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.akash1084.GraceMinistryApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c0b45dc6-51e7-4640-b2b0-33dfa6b3c0c2"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
