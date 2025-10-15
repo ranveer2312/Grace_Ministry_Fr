@@ -1,6 +1,8 @@
-// metro.config.js
-const { getDefaultConfig } = require('@react-native/metro-config');
+const { getDefaultConfig } = require('expo/metro-config');
 
-const defaultConfig = getDefaultConfig(__dirname);
+const config = getDefaultConfig(__dirname);
 
-module.exports = defaultConfig;
+// Ensure proper module resolution
+config.resolver.platforms = ['native', 'ios', 'android', 'web'];
+
+module.exports = config;
