@@ -11,11 +11,19 @@ import {
     Share,
     Modal,
     Animated,
+    Dimensions, // Added for responsiveness
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
+
+// --- Responsive Sizing ---
+const { width } = Dimensions.get('window');
+const BASE_WIDTH = 390; // Using a standard phone width as a baseline
+const scale = width / BASE_WIDTH;
+const responsiveSize = (size: number) => Math.round(scale * size);
+
 
 // --- Interfaces and Constants ---
 interface Verse {
@@ -177,7 +185,7 @@ export default function BibleVerseScreen() {
         }
         if (translatedVerse) {
             setIsSpeaking(true);
-            
+
             // Immediately start speaking without await for faster response
             Speech.speak(translatedVerse.text, {
                 language: selectedLanguage.code,
@@ -218,7 +226,7 @@ export default function BibleVerseScreen() {
                             <LinearGradient
                                 colors={['rgba(255, 215, 0, 0.2)', 'rgba(255, 215, 0, 0.05)']}
                                 style={styles.iconGradient}>
-                                <Ionicons name="book-outline" size={48} color="#FFD700" />
+                                <Ionicons name="book-outline" size={responsiveSize(48)} color="#FFD700" />
                             </LinearGradient>
                         </View>
                         <Text style={styles.header}>Daily Scripture</Text>
@@ -268,7 +276,7 @@ export default function BibleVerseScreen() {
                                     <View style={styles.languageButtonContent}>
                                         <Text style={styles.languageFlag}>{selectedLanguage.flag}</Text>
                                         <Text style={styles.languageButtonText}>{selectedLanguage.name}</Text>
-                                        <Ionicons name="chevron-down" size={18} color="#FFD700" />
+                                        <Ionicons name="chevron-down" size={responsiveSize(18)} color="#FFD700" />
                                     </View>
                                 </TouchableOpacity>
 
@@ -282,7 +290,7 @@ export default function BibleVerseScreen() {
                                             style={styles.actionButtonGradient}>
                                             <Ionicons
                                                 name={isSpeaking ? "stop-circle-outline" : "volume-medium-outline"}
-                                                size={22}
+                                                size={responsiveSize(22)}
                                                 color="#fff"
                                             />
                                             <Text style={styles.actionButtonText}>
@@ -292,13 +300,13 @@ export default function BibleVerseScreen() {
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.actionButton} onPress={handleShare}>
                                         <LinearGradient colors={['#333', '#222']} style={styles.actionButtonGradient}>
-                                            <Ionicons name="share-social-outline" size={22} color="#fff" />
+                                            <Ionicons name="share-social-outline" size={responsiveSize(22)} color="#fff" />
                                             <Text style={styles.actionButtonText}>Share</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.actionButton} onPress={fetchNewVerse}>
                                         <LinearGradient colors={['#333', '#222']} style={styles.actionButtonGradient}>
-                                            <Ionicons name="refresh-outline" size={22} color="#fff" />
+                                            <Ionicons name="refresh-outline" size={responsiveSize(22)} color="#fff" />
                                             <Text style={styles.actionButtonText}>New Verse</Text>
                                         </LinearGradient>
                                     </TouchableOpacity>
@@ -320,7 +328,7 @@ export default function BibleVerseScreen() {
                         <View style={styles.modalHeader}>
                             <Text style={styles.modalTitle}>Select Language</Text>
                             <TouchableOpacity onPress={() => setShowLanguageModal(false)}>
-                                <Ionicons name="close-circle" size={28} color="#666" />
+                                <Ionicons name="close-circle" size={responsiveSize(28)} color="#666" />
                             </TouchableOpacity>
                         </View>
                         <ScrollView style={styles.languageList} showsVerticalScrollIndicator={false}>
@@ -335,7 +343,7 @@ export default function BibleVerseScreen() {
                                     <Text style={styles.languageItemFlag}>{language.flag}</Text>
                                     <Text style={styles.languageItemText}>{language.name}</Text>
                                     {selectedLanguage.code === language.code && (
-                                        <Ionicons name="checkmark-circle" size={24} color="#FFD700" />
+                                        <Ionicons name="checkmark-circle" size={responsiveSize(24)} color="#FFD700" />
                                     )}
                                 </TouchableOpacity>
                             ))}
@@ -357,35 +365,35 @@ const styles = StyleSheet.create({
     },
     content: {
         flexGrow: 1,
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 40,
+        paddingHorizontal: responsiveSize(20),
+        paddingTop: responsiveSize(20),
+        paddingBottom: responsiveSize(40),
     },
     headerSection: {
         alignItems: 'center',
-        marginBottom: 32,
+        marginBottom: responsiveSize(32),
     },
     iconContainer: {
-        marginBottom: 20,
+        marginBottom: responsiveSize(20),
     },
     iconGradient: {
-        width: 96,
-        height: 96,
-        borderRadius: 48,
+        width: responsiveSize(96),
+        height: responsiveSize(96),
+        borderRadius: responsiveSize(48),
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'rgba(255, 215, 0, 0.3)',
     },
     header: {
-        fontSize: 32,
+        fontSize: responsiveSize(32),
         fontWeight: '800',
         color: '#ffffff',
         textAlign: 'center',
-        marginBottom: 8,
+        marginBottom: responsiveSize(8),
     },
     subHeader: {
-        fontSize: 16,
+        fontSize: responsiveSize(16),
         color: '#b0b0b0',
         textAlign: 'center',
     },
@@ -393,15 +401,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 100,
+        paddingVertical: responsiveSize(100),
     },
     verseContainer: {
-        gap: 24,
+        gap: responsiveSize(24),
     },
     verseCard: {
-        borderRadius: 24,
-        padding: 32,
-        paddingVertical: 48,
+        borderRadius: responsiveSize(24),
+        padding: responsiveSize(32),
+        paddingVertical: responsiveSize(48),
         borderWidth: 1,
         borderColor: 'rgba(255, 215, 0, 0.2)',
         shadowColor: '#FFD700',
@@ -415,90 +423,92 @@ const styles = StyleSheet.create({
     },
     quoteIconTop: {
         position: 'absolute',
-        top: 15,
-        left: 20,
-        fontSize: 80,
+        top: responsiveSize(15),
+        left: responsiveSize(20),
+        fontSize: responsiveSize(80),
         color: 'rgba(255, 255, 255, 0.05)',
         fontFamily: 'Georgia',
     },
     quoteIconBottom: {
         position: 'absolute',
-        bottom: 15,
-        right: 20,
-        fontSize: 80,
+        bottom: responsiveSize(15),
+        right: responsiveSize(20),
+        fontSize: responsiveSize(80),
         color: 'rgba(255, 255, 255, 0.05)',
         fontFamily: 'Georgia',
-        transform: [{rotate: '180deg'}],
+        transform: [{ rotate: '180deg' }],
     },
     verseText: {
-        fontSize: 24,
+        fontSize: responsiveSize(24),
         fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
-        lineHeight: 40,
+        lineHeight: responsiveSize(40),
         color: '#ffffff',
         textAlign: 'center',
         fontStyle: 'italic',
     },
     verseFooter: {
-        marginTop: 32,
+        marginTop: responsiveSize(32),
         alignItems: 'center',
     },
     referenceContainer: {
         alignItems: 'center',
-        gap: 8,
+        gap: responsiveSize(8),
     },
     referenceDivider: {
-        width: 40,
+        width: responsiveSize(40),
         height: 2,
         backgroundColor: '#FFD700',
         borderRadius: 1,
     },
     verseReference: {
-        fontSize: 18,
+        fontSize: responsiveSize(18),
         fontWeight: '700',
         color: '#FFD700',
     },
     translatingContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 12,
-        minHeight: 150,
+        gap: responsiveSize(12),
+        minHeight: responsiveSize(150),
     },
     translatingText: {
-        fontSize: 16,
+        fontSize: responsiveSize(16),
         color: '#FFD700',
         fontWeight: '600',
     },
     actionContainer: {
-        gap: 16,
+        gap: responsiveSize(16),
     },
     languageButton: {
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: 16,
+        borderRadius: responsiveSize(16),
         borderWidth: 1,
         borderColor: 'rgba(255, 215, 0, 0.3)',
     },
     languageButtonContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
-        gap: 12,
+        padding: responsiveSize(16),
+        gap: responsiveSize(12),
     },
     languageFlag: {
-        fontSize: 24,
+        fontSize: responsiveSize(24),
     },
     languageButtonText: {
-        fontSize: 16,
+        fontSize: responsiveSize(16),
         fontWeight: '700',
         color: '#ffffff',
         flex: 1,
     },
     buttonRow: {
         flexDirection: 'row',
-        gap: 12,
+        gap: responsiveSize(12),
+        flexWrap: 'wrap', // Allows buttons to wrap to the next line on narrow screens
     },
     actionButton: {
         flex: 1,
-        borderRadius: 16,
+        minWidth: '45%', // Ensures buttons don't get too small when wrapped
+        borderRadius: responsiveSize(16),
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -510,17 +520,17 @@ const styles = StyleSheet.create({
     },
     actionButtonGradient: {
         flex: 1,
-        padding: 16,
+        padding: responsiveSize(16),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 8,
-        borderRadius: 16,
+        gap: responsiveSize(8),
+        borderRadius: responsiveSize(16),
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.1)',
     },
     actionButtonText: {
-        fontSize: 15,
+        fontSize: responsiveSize(15),
         fontWeight: '600',
         color: '#ffffff',
     },
@@ -531,8 +541,8 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         backgroundColor: '#1a1a1a',
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
+        borderTopLeftRadius: responsiveSize(24),
+        borderTopRightRadius: responsiveSize(24),
         maxHeight: '70%',
         borderTopWidth: 1,
         borderColor: 'rgba(255, 215, 0, 0.2)',
@@ -541,38 +551,38 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 20,
+        padding: responsiveSize(20),
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(255, 255, 255, 0.05)',
     },
     modalTitle: {
-        fontSize: 22,
+        fontSize: responsiveSize(22),
         fontWeight: '800',
         color: '#ffffff',
     },
     languageList: {
-        padding: 20,
+        padding: responsiveSize(20),
     },
     languageItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
+        padding: responsiveSize(16),
         backgroundColor: '#0a0a0a',
-        borderRadius: 12,
-        marginBottom: 12,
+        borderRadius: responsiveSize(12),
+        marginBottom: responsiveSize(12),
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.05)',
-        gap: 16,
+        gap: responsiveSize(16),
     },
     languageItemSelected: {
         backgroundColor: 'rgba(255, 215, 0, 0.1)',
         borderColor: 'rgba(255, 215, 0, 0.3)',
     },
     languageItemFlag: {
-        fontSize: 28,
+        fontSize: responsiveSize(28),
     },
     languageItemText: {
-        fontSize: 17,
+        fontSize: responsiveSize(17),
         fontWeight: '600',
         color: '#ffffff',
         flex: 1,

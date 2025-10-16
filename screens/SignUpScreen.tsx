@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { 
-    View, 
-    Text, 
-    TextInput, 
-    TouchableOpacity, 
-    StyleSheet, 
-    Alert, 
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
     ScrollView,
-    ActivityIndicator 
+    ActivityIndicator,
+    Dimensions // Added for responsiveness
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -16,6 +17,12 @@ import { auth, db } from '../firebaseConfig';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+// --- Responsive Sizing Utility ---
+const { width } = Dimensions.get('window');
+const BASE_WIDTH = 390; // A standard baseline for modern phones
+const responsiveSize = (size: number) => Math.round((width / BASE_WIDTH) * size);
+
+
 export default function SignUpScreen({ navigation }: any) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -23,7 +30,7 @@ export default function SignUpScreen({ navigation }: any) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPasswd, setConfirmPasswd] = useState('');
-    
+
     // New state for better UX
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -60,13 +67,13 @@ export default function SignUpScreen({ navigation }: any) {
 
     return (
         <LinearGradient colors={['#111111', '#000000']} style={styles.container}>
-            <SafeAreaView style={{flex: 1}}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps='handled'>
-                    
+
                     {/* Header Section */}
                     <View style={styles.headerSection}>
                         <View style={styles.iconContainer}>
-                            <Ionicons name="person-add-outline" size={32} color="#FFD700" />
+                            <Ionicons name="person-add-outline" size={responsiveSize(32)} color="#FFD700" />
                         </View>
                         <Text style={styles.title}>Join Grace Ministry</Text>
                         <Text style={styles.subtitle}>Create your account to begin your journey.</Text>
@@ -75,41 +82,41 @@ export default function SignUpScreen({ navigation }: any) {
                     {/* Input Fields */}
                     <View style={styles.inputGroup}>
                         <View style={[styles.inputContainer, focusedField === 'firstName' && styles.inputContainerFocused]}>
-                            <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <Ionicons name="person-outline" size={responsiveSize(20)} color="#666" style={styles.inputIcon} />
                             <TextInput style={styles.input} placeholder="First Name" placeholderTextColor="#666" value={firstName} onChangeText={setFirstName} onFocus={() => setFocusedField('firstName')} onBlur={() => setFocusedField(null)} />
                         </View>
                         <View style={[styles.inputContainer, focusedField === 'lastName' && styles.inputContainerFocused]}>
-                            <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <Ionicons name="person-outline" size={responsiveSize(20)} color="#666" style={styles.inputIcon} />
                             <TextInput style={styles.input} placeholder="Last Name" placeholderTextColor="#666" value={lastName} onChangeText={setLastName} onFocus={() => setFocusedField('lastName')} onBlur={() => setFocusedField(null)} />
                         </View>
                         <View style={[styles.inputContainer, focusedField === 'mobNo' && styles.inputContainerFocused]}>
-                            <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <Ionicons name="call-outline" size={responsiveSize(20)} color="#666" style={styles.inputIcon} />
                             <TextInput style={styles.input} placeholder="Mobile Number" placeholderTextColor="#666" value={mobNo} onChangeText={setMobNo} keyboardType="phone-pad" onFocus={() => setFocusedField('mobNo')} onBlur={() => setFocusedField(null)} />
                         </View>
                         <View style={[styles.inputContainer, focusedField === 'email' && styles.inputContainerFocused]}>
-                            <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <Ionicons name="mail-outline" size={responsiveSize(20)} color="#666" style={styles.inputIcon} />
                             <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#666" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" onFocus={() => setFocusedField('email')} onBlur={() => setFocusedField(null)} />
                         </View>
                         <View style={[styles.inputContainer, focusedField === 'password' && styles.inputContainerFocused]}>
-                            <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <Ionicons name="lock-closed-outline" size={responsiveSize(20)} color="#666" style={styles.inputIcon} />
                             <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#666" value={password} onChangeText={setPassword} secureTextEntry={!isPasswordVisible} onFocus={() => setFocusedField('password')} onBlur={() => setFocusedField(null)} />
                             <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
-                                <Ionicons name={isPasswordVisible ? "eye-off-outline" : "eye-outline"} size={22} color="#666" style={styles.eyeIcon} />
+                                <Ionicons name={isPasswordVisible ? "eye-off-outline" : "eye-outline"} size={responsiveSize(22)} color="#666" style={styles.eyeIcon} />
                             </TouchableOpacity>
                         </View>
                         <View style={[styles.inputContainer, focusedField === 'confirmPasswd' && styles.inputContainerFocused]}>
-                            <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                            <Ionicons name="lock-closed-outline" size={responsiveSize(20)} color="#666" style={styles.inputIcon} />
                             <TextInput style={styles.input} placeholder="Confirm Password" placeholderTextColor="#666" value={confirmPasswd} onChangeText={setConfirmPasswd} secureTextEntry={!isPasswordVisible} onFocus={() => setFocusedField('confirmPasswd')} onBlur={() => setFocusedField(null)} />
                             {password === confirmPasswd && confirmPasswd.length > 0 && (
-                                <Ionicons name="checkmark-circle" size={22} color="#2ecc71" style={styles.eyeIcon} />
+                                <Ionicons name="checkmark-circle" size={responsiveSize(22)} color="#2ecc71" style={styles.eyeIcon} />
                             )}
                         </View>
                     </View>
 
                     {/* Sign Up Button */}
                     <TouchableOpacity style={styles.buttonWrapper} onPress={handleSignUp} disabled={loading}>
-                        <LinearGradient 
-                            colors={['#FFD700', '#FFA500']} 
+                        <LinearGradient
+                            colors={['#FFD700', '#FFA500']}
                             style={styles.button}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 0 }}
@@ -141,45 +148,45 @@ const styles = StyleSheet.create({
     scrollContent: {
         flexGrow: 1,
         justifyContent: 'center',
-        paddingHorizontal: 24,
-        paddingVertical: 20,
+        paddingHorizontal: responsiveSize(24),
+        paddingVertical: responsiveSize(20),
     },
     headerSection: {
         alignItems: 'center',
-        marginBottom: 32,
+        marginBottom: responsiveSize(32),
     },
     iconContainer: {
-        width: 64,
-        height: 64,
-        borderRadius: 32,
+        width: responsiveSize(64),
+        height: responsiveSize(64),
+        borderRadius: responsiveSize(32),
         backgroundColor: 'rgba(255, 215, 0, 0.1)',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 16,
+        marginBottom: responsiveSize(16),
         borderWidth: 1,
         borderColor: 'rgba(255, 215, 0, 0.2)',
     },
     title: {
-        fontSize: 28,
+        fontSize: responsiveSize(28),
         fontWeight: '800',
         color: '#ffffff',
         textAlign: 'center',
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: responsiveSize(16),
         color: '#999',
         textAlign: 'center',
-        marginTop: 8,
+        marginTop: responsiveSize(8),
     },
     inputGroup: {
-        gap: 16,
-        marginBottom: 24,
+        gap: responsiveSize(16),
+        marginBottom: responsiveSize(24),
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#1a1a1a',
-        borderRadius: 12,
+        borderRadius: responsiveSize(12),
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.1)',
     },
@@ -187,40 +194,40 @@ const styles = StyleSheet.create({
         borderColor: '#FFD700',
     },
     inputIcon: {
-        marginLeft: 16,
+        marginLeft: responsiveSize(16),
     },
     input: {
         flex: 1,
-        padding: 16,
-        fontSize: 16,
+        padding: responsiveSize(16),
+        fontSize: responsiveSize(16),
         color: '#ffffff',
     },
     eyeIcon: {
-        marginRight: 16,
+        marginRight: responsiveSize(16),
     },
     buttonWrapper: {
-        borderRadius: 12,
+        borderRadius: responsiveSize(12),
         elevation: 8,
         shadowColor: '#FFD700',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 0, height: responsiveSize(4) },
         shadowOpacity: 0.3,
-        shadowRadius: 8,
+        shadowRadius: responsiveSize(8),
     },
     button: {
-        paddingVertical: 16,
-        borderRadius: 12,
+        paddingVertical: responsiveSize(16),
+        borderRadius: responsiveSize(12),
         alignItems: 'center',
     },
     buttonText: {
         color: '#000',
-        fontSize: 18,
+        fontSize: responsiveSize(18),
         fontWeight: 'bold',
     },
     switchText: {
         color: '#999',
         textAlign: 'center',
-        marginTop: 24,
-        fontSize: 16,
+        marginTop: responsiveSize(24),
+        fontSize: responsiveSize(16),
     },
     switchLink: {
         color: '#FFD700',
